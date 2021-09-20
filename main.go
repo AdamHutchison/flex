@@ -1,7 +1,15 @@
-// bootstraps the APP
+package main
 
-// Resolves the kernal out the container
+import {
+	_ "github.com/joho/godotenv"
+}
 
-// passes the request to the kernal
+func main() {
+	// bootstraps the APP
 
-// returns the response from the kernal
+	// Resolves the kernal out the container
+
+	// passes the request to the kernal
+
+	// returns the response from the kernal
+}
