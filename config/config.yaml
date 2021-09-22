@@ -1,2 +1,2 @@
 app:
-  name: "Flex App"
+  name: ${APP_NAME}

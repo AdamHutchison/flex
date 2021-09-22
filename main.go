@@ -16,6 +16,11 @@ func main() {
 
 	fmt.Println(viper.GetString("app.name"))
 
+	var config string
+	viper.UnmarshalKey("app.name", &config, viper.DecodeHook(bootstrap.Hook))
+
+	fmt.Println()
+
 	// Resolves the kernal out the container
 
 	// passes the request to the kernal
