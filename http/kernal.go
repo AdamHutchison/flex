@@ -8,13 +8,11 @@
 
 package http
 
+import ()
+
 type HttpKernal struct {
 }
 
-func (*HttpKernal) Bootstrap() {
-
-}
-
 func (*HttpKernal) Handle() {
-	
+
 }

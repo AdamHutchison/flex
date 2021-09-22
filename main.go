@@ -1,11 +1,15 @@
 package main
 
-import {
-	_ "github.com/joho/godotenv"
-}
+import (
+	"github.com/AdamHutchison/flux/bootstrap"
+)
 
 func main() {
 	// bootstraps the APP
+
+	app := bootstrap.FluxApp{}
+
+	app.Bootstrap()
 
 	// Resolves the kernal out the container
 
