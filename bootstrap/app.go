@@ -3,6 +3,7 @@
 package bootstrap
 
 import (
+	config "github.com/AdamHutchison/flux-config"
 	"github.com/AdamHutchison/flux/http"
 )
 
@@ -11,9 +12,7 @@ type FluxApp struct {
 }
 
 func (f *FluxApp) Bootstrap() {
-	config := Config{}
-
-	config.LoadConfig()
+	config.Load()
 }
 
 func (f *FluxApp) GetKernal() http.HttpKernal {
