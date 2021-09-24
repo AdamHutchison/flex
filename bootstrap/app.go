@@ -1,21 +1,18 @@
-// Creates container
-// Registers http kernal
 package bootstrap
 
 import (
 	config "github.com/AdamHutchison/flux-config"
-	"github.com/AdamHutchison/flux/http"
 )
 
 type FluxApp struct {
-	kernal http.HttpKernal
+	kernal HttpKernal
 }
 
 func (f *FluxApp) Bootstrap() {
 	config.Load()
+	f.kernal = NewKernal()
 }
 
-func (f *FluxApp) GetKernal() http.HttpKernal {
+func (f *FluxApp) GetKernal() HttpKernal {
 	return f.kernal
 }
-
