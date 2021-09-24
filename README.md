@@ -17,6 +17,9 @@ Routes are registered in the `RegisterRoutes()` function contained within the `h
 ### Handlers
 Handlers are located in the `/http/handlers` directory. A base handler has been added for you convenience that implements a `Respond` method. This is a simple helper to allow you to send API responses easily. It is up to you if you use it.
 
+### Transformers
+Transformers are just structs that allow you to structure you api responses easily. These are located in the `http/transformers` directory. The `Response`method on the `BaseHandler` will expect a transformer struct and will automatically wrap it in the `BaseTransformer` allowing you to easily control how you response data is structured.
+
 ### Middleware
 Middleware should be place in the `http/middleware` directory and global middleware should be registered within the `RegisterGlobalMiddleware()` function in the `http/middleware/middleware.go` file. Middleware registered here will be applied to all routes.
 
