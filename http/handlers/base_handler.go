@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strings"
 
@@ -49,7 +48,7 @@ func (bh *BaseHandler) validateQuery(h validateable, w http.ResponseWriter, r *h
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
-		log.Fatal(err)
+		panic(err)
 	}
 
 	return validator.Validate()
