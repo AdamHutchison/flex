@@ -18,6 +18,10 @@ func (k *HttpKernal) HandleRequests() {
 	log.Fatal(http.ListenAndServe(":"+config.Get("app.port"), k.router))
 }
 
+func (k *HttpKernal) GetRouter() *mux.Router {
+	return k.router
+}
+
 func NewKernal() HttpKernal {
 	kernal := HttpKernal{
 		router: mux.NewRouter(),
