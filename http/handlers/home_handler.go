@@ -12,7 +12,7 @@ type HomeHandler struct {
 }
 
 func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := h.BaseHandler.validate(h, w, r)
+	err := h.Validate(h, w, r)
 
 	if err != nil {
 		h.Error(err, w, http.StatusBadRequest)
@@ -26,7 +26,7 @@ func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h.Respond(data, w, http.StatusOK)
 }
 
-func (h HomeHandler) getValidator() validators.ValidatorInterface {
+func (h HomeHandler) GetValidator() interface{} {
 	validator := validators.HomeValidator{}
 
 	return &validator
