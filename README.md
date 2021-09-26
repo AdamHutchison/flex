@@ -8,6 +8,8 @@ Flux consists of many smaller modules that handle specific pieces of the framewo
 * [Flux Config](https://github.com/AdamHutchison/flux-config) - Handles the loading and retrival of configuration / env values
 * [Gorilla Mux](https://github.com/gorilla/mux) - Handles routing
 * [Gorilla Handlers](https://github.com/gorilla/handlers) - Adds useful middleware handlers
+* [Gorilla Schema](https://github.com/gorilla/schema) - Used in request validation
+* [Go Playground Validator](https://github.com/go-playground/validator) - Used in request validation
 
 ## Routing
 
