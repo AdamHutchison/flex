@@ -6,5 +6,5 @@ import (
 )
 
 func RegisterRoutes(mux *mux.Router) {
-	mux.Handle("/", h.HomeHandler{}).Methods("GET").Name("home")
+	mux.HandleFunc("/", h.HomeHandler{}.Show).Methods("GET").Name("home")
 }

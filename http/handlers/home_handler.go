@@ -4,15 +4,15 @@ import (
 	"net/http"
 
 	"github.com/AdamHutchison/flux/http/transformers"
-	"github.com/AdamHutchison/flux/http/validators"
+	v "github.com/AdamHutchison/flux/http/validators"
 )
 
 type HomeHandler struct {
 	BaseHandler
 }
 
-func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := h.Validate(h, w, r)
+func (h HomeHandler) Show(w http.ResponseWriter, r *http.Request) {
+	err := h.Validate(v.HomeValidator{}, w, r)
 
 	if err != nil {
 		h.Error(err, w, http.StatusBadRequest)
@@ -24,10 +24,4 @@ func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.Respond(data, w, http.StatusOK)
-}
-
-func (h HomeHandler) GetValidator() interface{} {
-	validator := validators.HomeValidator{}
-
-	return &validator
 }

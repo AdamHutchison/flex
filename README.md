@@ -1,6 +1,6 @@
 # Flux Framework
 
-The Flux framework is a work in progress and has been designed as a personal starting point for web applications.
+The Flux framework is a work in progress and has been designed as a personal starting point for building web API's.
 
 ## Modules
 Flux consists of many smaller modules that handle specific pieces of the frameworks functionality. See the readme of each for documentation:
@@ -10,6 +10,7 @@ Flux consists of many smaller modules that handle specific pieces of the framewo
 * [Gorilla Handlers](https://github.com/gorilla/handlers) - Adds useful middleware handlers
 * [Gorilla Schema](https://github.com/gorilla/schema) - Used in request validation
 * [Go Playground Validator](https://github.com/go-playground/validator) - Used in request validation
+* [GORM](https://gorm.io/index.html) - ORM used to handle all things model and database related
 
 ## Routing
 
@@ -30,21 +31,11 @@ type HomeValidator struct {
 }
 ```
 
-Then add a `GetValidator()` methtod to your handler that returns the validator:
-
-```go
-func (h HomeHandler) GetValidator() interface{} {
-	validator := validators.HomeValidator{}
-
-	return &validator
-}
-```
-
-You may then use the `Validate(h Validateable, w http.ResponseWriter, r *http.Request) error` method on the `BaseHandler`:
+You may then use the `Validate(validator interface{}, w http.ResponseWriter, r *http.Request) error` method on the `BaseHandler`:
 
 ```go
 func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := h.Validate(h, w, r)
+	err := h.Validate(validators.HomeValidator{}, w, r)
 
 	if err != nil {
 		h.Error(err, w, http.StatusBadRequest)
@@ -65,3 +56,46 @@ Transformers are just structs that allow you to structure you api responses easi
 ### Middleware
 Middleware should be place in the `http/middleware` directory and global middleware should be registered within the `RegisterGlobalMiddleware()` function in the `http/middleware/middleware.go` file. Middleware registered here will be applied to all routes.
 
+## Database
+Flux uses the GORM to allow you to manage anything database related.
+
+### Creating Models
+Models are located in the `database/models` directory and are simply structs that contain a `gorm.Model` embedded struct. These are just standard GORM models and more information can be found about them in the [GORM documentation](https://gorm.io/docs/models.html).
+
+```go
+package models
+
+import (
+	"gorm.io/gorm"
+)
+
+type User struct {
+  gorm.Model
+  Email  string
+  Name string
+}
+```
+
+### Obtaining a database instance
+Database credentials can be set in the .env file as follows:
+```bash
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=password
+DB_NAME=flux
+```
+
+You can then obtain a GORM DB connection instance by calling the `database.DB()` function:
+
+```go
+func (h HomeHandler) Create(w http.ResponseWriter, r *http.Request) {
+	db := database.DB()
+
+	user := models.User{Name: "Jim", Email: "jim@test.com", Password: "Super Secure"}
+
+	db.Create(&user)
+
+	h.Respond(user, w, http.StatusOK)
+}
+```

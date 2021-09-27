@@ -8,25 +8,18 @@ import (
 	"github.com/gorilla/schema"
 )
 
-type Validateable interface {
-	GetValidator() interface{}
-	http.Handler
-}
-
 type BaseValidator struct {
 }
 
-func (v *BaseValidator) Validate(h Validateable, w http.ResponseWriter, r *http.Request) error {
+func (v *BaseValidator) Validate(validator interface{}, w http.ResponseWriter, r *http.Request) error {
 	if r.Method == http.MethodGet {
-		return v.validateQuery(h, w, r)
+		return v.validateQuery(validator, w, r)
 	}
 
-	return v.validateBody(h, w, r)
+	return v.validateBody(validator, w, r)
 }
 
-func (v *BaseValidator) validateBody(h Validateable, w http.ResponseWriter, r *http.Request) error {
-	validator := h.GetValidator()
-
+func (v *BaseValidator) validateBody(validator interface{}, w http.ResponseWriter, r *http.Request) error {
 	err := json.NewDecoder(r.Body).Decode(validator)
 
 	if err != nil {
@@ -37,9 +30,7 @@ func (v *BaseValidator) validateBody(h Validateable, w http.ResponseWriter, r *h
 	return validateStruct(validator)
 }
 
-func (v *BaseValidator) validateQuery(h Validateable, w http.ResponseWriter, r *http.Request) error {
-	validator := h.GetValidator()
-
+func (v *BaseValidator) validateQuery(validator interface{}, w http.ResponseWriter, r *http.Request) error {
 	decoder := schema.NewDecoder()
 	decoder.IgnoreUnknownKeys(true)
 
