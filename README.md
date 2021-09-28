@@ -35,7 +35,7 @@ You may then use the `Validate(validator interface{}, w http.ResponseWriter, r *
 
 ```go
 func (h HomeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	err := h.Validate(validators.HomeValidator{}, w, r)
+	err := h.Validate(new(validators.HomeValidator), w, r)
 
 	if err != nil {
 		h.Error(err, w, http.StatusBadRequest)

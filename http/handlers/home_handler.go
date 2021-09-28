@@ -12,7 +12,7 @@ type HomeHandler struct {
 }
 
 func (h HomeHandler) Show(w http.ResponseWriter, r *http.Request) {
-	err := h.Validate(v.HomeValidator{}, w, r)
+	err := h.Validate(new(v.HomeValidator), w, r)
 
 	if err != nil {
 		h.Error(err, w, http.StatusBadRequest)
