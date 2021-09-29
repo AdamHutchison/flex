@@ -2,12 +2,33 @@ package database
 
 import (
 	"fmt"
+	"reflect"
 
 	config "github.com/AdamHutchison/flux-config"
+	log "github.com/sirupsen/logrus"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
+
+type Connection struct {
+	autoMigrations []interface{}
+}
+
+func (c *Connection) AddAutoMigration(model interface{}) {
+	models := append(c.autoMigrations, model)
+	c.autoMigrations = models
+}
+
+func (c *Connection) RunAutoMigrations() {
+	db := DB()
+
+	for _, model := range c.autoMigrations {
+		log.Info("Migrating " + reflect.TypeOf(model).String())
+		db.AutoMigrate(model)
+	}
+}
+
 
 func DB() *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysql.Config{

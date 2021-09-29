@@ -99,3 +99,37 @@ func (h HomeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	h.Respond(user, w, http.StatusOK)
 }
 ```
+
+### Migrations
+
+There are two options for migrations in flux, models can either be auto migrated by registering them in the `RegisterAutoMigrations()` function contained within `database/migrations/migrate.go` file, e.g:
+
+```go
+func RegisterAutoMigrations(db *database.Connection) {
+	db.AddAutoMigration(new(models.User))
+}
+```
+
+or you can manually add a bespoke migration by adding code to the `RegisterStandardMigrations()` within `database/migrations/migrate.go`. It is recommended that the actual code for running the migration is extracted to it's own function and then only called from this here to help keep the file maintainable over time. e.g here we have a `database/migrations/migrate.go` like so:
+
+```go
+package migrations
+
+import (
+	"github.com/AdamHutchison/flux/database"
+	"github.com/AdamHutchison/flux/database/models"
+)
+
+func RunUserMigration() {
+	db := database.DB()
+	db.Migrator().DropColumn(&models.User{}, "password")
+}
+```
+
+and we call the `RunUserMigration()` from our `RegisterStandardMigrations()` function:
+
+```go
+func RegisterStandardMigrations(db *database.Connection) {
+	RunUserMigration()
+}
+```
