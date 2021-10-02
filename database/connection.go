@@ -2,12 +2,16 @@ package database
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
 
 	config "github.com/AdamHutchison/flux-config"
 	"github.com/AdamHutchison/flux/database/migrations"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type Connection struct {
@@ -20,17 +24,30 @@ func (c *Connection) RunMigrations() {
 	migrations.RegisterStandardMigrations(db)
 }
 
-
 func DB() *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN: getDsn(),
-	}), &gorm.Config{})
+	}), &gorm.Config{
+		Logger: getDBLogger(),
+	})
 
 	if err != nil {
 		panic("failed to connect to database")
 	}
 
 	return db
+}
+
+func getDBLogger() logger.Interface {
+	return logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold:             time.Second,   // Slow SQL threshold
+			LogLevel:                  logger.Info, // Log level
+			IgnoreRecordNotFoundError: true,          // Ignore ErrRecordNotFound error for logger
+			Colorful:                  true,         // Disable color
+		},
+	)
 }
 
 func getDsn() string {
