@@ -132,3 +132,6 @@ func RegisterStandardMigrations(db *gorm.DB) {
 	RunUserMigration(db)
 }
 ```
+
+### Model Event Hooks
+GORM allows you to add model hooks to model structs as detailed in the [GORM documentation](https://gorm.io/docs/hooks.html).
